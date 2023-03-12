@@ -45,4 +45,16 @@ router.delete(
   }
 );
 
+//Get Product
+router.get("/find/:id", validateObjectId, async (req, res) => {
+  const product = await Product.findById(req.params.id);
+
+  if (!product)
+    return res
+      .status(404)
+      .json("the product with the current ID was not found");
+
+  res.json(product);
+});
+
 module.exports = router;
