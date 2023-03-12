@@ -41,3 +41,13 @@ router.delete("/:id", [verifyToken, validateObjectId], async (req, res) => {
 });
 
 module.exports = router;
+
+//Get User
+router.get("/find/:id", [verifyToken, validateObjectId], async (req, res) => {
+  const user = await User.findById(req.params.id).select("-password");
+
+  if (!user)
+    return res.status(404).json("the user with the current ID was not found");
+
+  res.json(user);
+});
