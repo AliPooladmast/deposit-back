@@ -29,4 +29,20 @@ router.put("/:id", [verifyTokenSeller, validateObjectId], async (req, res) => {
   res.json(updatedProduct);
 });
 
+//Delete Product
+router.delete(
+  "/:id",
+  [verifyTokenSeller, validateObjectId],
+  async (req, res) => {
+    const product = await Product.findByIdAndDelete(req.params.id);
+
+    if (!product)
+      return res
+        .status(404)
+        .json("the product with the current ID was not found");
+
+    res.json("product has been deleted...");
+  }
+);
+
 module.exports = router;
