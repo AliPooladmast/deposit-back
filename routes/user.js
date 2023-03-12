@@ -1,9 +1,10 @@
-const { verifyToken } = require("../middleware/verifyToken");
+const { verifyToken, verifyTokenBuyer } = require("../middleware/verifyToken");
 const router = require("express").Router();
 const CryptoJS = require("crypto-js");
 const { User, schema } = require("../models/User");
 const validateSchema = require("../middleware/validateSchema");
 const validateObjectId = require("../middleware/validateObjectId");
+const depositCoins = [5, 10, 20, 50, 100];
 
 //Upadate User
 router.put(
@@ -40,8 +41,6 @@ router.delete("/:id", [verifyToken, validateObjectId], async (req, res) => {
   res.json("user has been deleted...");
 });
 
-module.exports = router;
-
 //Get User
 router.get("/find/:id", [verifyToken, validateObjectId], async (req, res) => {
   const user = await User.findById(req.params.id).select("-password");
@@ -51,3 +50,23 @@ router.get("/find/:id", [verifyToken, validateObjectId], async (req, res) => {
 
   res.json(user);
 });
+
+//Deposit
+router.put("/perform/deposit", verifyTokenBuyer, async (req, res) => {
+  const updatedUser = await User.findById(req.user.id).select("-password");
+
+  if (!updatedUser)
+    return res.status(404).json("the user with the current ID was not found");
+
+  if (!depositCoins.includes(req.body.deposit))
+    return res
+      .status(404)
+      .json("deposit is only allowed by 5, 10, 20, 50 and 100 amounts");
+
+  updatedUser.deposit += req.body.deposit;
+  updatedUser.save();
+
+  res.json(updatedUser);
+});
+
+module.exports = router;
