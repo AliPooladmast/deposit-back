@@ -21,7 +21,9 @@ router.post("/register", validateSchema(schema), async (req, res) => {
 
   const savedUser = await user.save();
 
+  const accessToken = savedUser.generateAuthToken();
   const { resPassword, ...resOthers } = savedUser._doc;
+  resOthers.token = accessToken;
 
   res.status(201).json(resOthers);
 });
