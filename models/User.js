@@ -23,6 +23,18 @@ const UserSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+UserSchema.methods.generateAuthToken = function () {
+  const token = jwt.sign(
+    {
+      id: this._id,
+      role: this.role,
+    },
+    process.env.TOKEN_SECRET_KEY,
+    { expiresIn: "3d" }
+  );
+  return token;
+};
+
 const schema = Joi.object({
   username: Joi.string().min(2).max(50).required(),
   password: Joi.string().min(5).max(1023).required(),
