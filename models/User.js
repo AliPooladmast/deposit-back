@@ -13,7 +13,12 @@ const UserSchema = new mongoose.Schema(
     },
     password: { type: String, required: true, minlength: 5, maxlength: 1023 },
     deposit: { type: Number, required: true, min: 1 },
-    role: { type: String, default: "Buyer" },
+    role: {
+      type: String,
+      default: "Buyer",
+      minlength: 2,
+      maxlength: 10,
+    },
   },
   { timestamps: true }
 );
@@ -22,7 +27,7 @@ const schema = Joi.object({
   username: Joi.string().min(2).max(50).required(),
   password: Joi.string().min(5).max(1023).required(),
   deposit: Joi.number().min(1).required(),
-  role: Joi.boolean(),
+  role: Joi.string().min(2).max(10),
 });
 
 module.exports.User = mongoose.model("User", UserSchema);
