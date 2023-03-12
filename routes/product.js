@@ -13,4 +13,20 @@ router.post("/", [verifyTokenSeller, validate(schema)], async (req, res) => {
   res.json(savedProduct);
 });
 
+//Upadate Product
+router.put("/:id", [verifyTokenSeller, validateObjectId], async (req, res) => {
+  const updatedProduct = await Product.findByIdAndUpdate(
+    req.params.id,
+    { $set: req.body },
+    { new: true }
+  );
+
+  if (!updatedProduct)
+    return res
+      .status(404)
+      .json("the product with the current ID was not found");
+
+  res.json(updatedProduct);
+});
+
 module.exports = router;
