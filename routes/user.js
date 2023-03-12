@@ -30,4 +30,14 @@ router.put(
   }
 );
 
+//Delete User
+router.delete("/:id", [verifyToken, validateObjectId], async (req, res) => {
+  const user = await User.findByIdAndDelete(req.params.id);
+
+  if (!user)
+    return res.status(404).json("the user with the current ID was not found");
+
+  res.json("user has been deleted...");
+});
+
 module.exports = router;
