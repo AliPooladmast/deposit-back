@@ -19,7 +19,6 @@ const ProductSchema = new mongooseModule.Schema(
 );
 
 const schema = JoiModule.object({
-  sellerId: JoiModule.string().hex().required(),
   productName: JoiModule.string().min(3).max(50).required().trim(),
   cost: JoiModule.number().min(1).required(),
   amountAvailable: JoiModule.number().min(1).required(),
