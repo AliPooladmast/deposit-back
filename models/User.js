@@ -35,12 +35,20 @@ UserSchema.methods.generateAuthToken = function () {
   return token;
 };
 
-const schema = Joi.object({
+const createSchema = Joi.object({
   username: Joi.string().min(2).max(50).required(),
   password: Joi.string().min(5).max(1023).required(),
   deposit: Joi.number().min(1).required(),
   role: Joi.string().min(2).max(10),
 });
 
+const editSchema = Joi.object({
+  username: Joi.string().min(2).max(50),
+  password: Joi.string().min(5).max(1023),
+  deposit: Joi.number().min(1),
+  role: Joi.string().min(2).max(10),
+});
+
 module.exports.User = mongoose.model("User", UserSchema);
-module.exports.schema = schema;
+module.exports.createSchema = createSchema;
+module.exports.editSchema = editSchema;
