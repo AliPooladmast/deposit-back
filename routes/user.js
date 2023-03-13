@@ -53,20 +53,19 @@ router.get("/find/:id", [verifyToken, validateObjectId], async (req, res) => {
 
 //Deposit
 router.put("/perform/deposit", verifyTokenBuyer, async (req, res) => {
-  const updatedUser = await User.findById(req.user.id).select("-password");
+  const user = await User.findById(req.user.id).select("-password");
 
-  if (!updatedUser)
-    return res.status(404).json("the user with the current ID was not found");
+  if (!user) return res.status(404).json("the user not found");
 
   if (!depositCoins.includes(req.body.deposit))
     return res
       .status(404)
       .json("deposit is only allowed by 5, 10, 20, 50 and 100 amounts");
 
-  updatedUser.deposit += req.body.deposit;
-  updatedUser.save();
+  user.deposit += req.body.deposit;
+  user.save();
 
-  res.json(updatedUser);
+  res.json(user);
 });
 
 module.exports = router;
