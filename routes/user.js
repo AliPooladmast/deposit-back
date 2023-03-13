@@ -51,7 +51,7 @@ router.get("/find/:id", [verifyToken, validateObjectId], async (req, res) => {
   res.json(user);
 });
 
-//Deposit
+//Charge Deposit
 router.put("/perform/deposit", verifyTokenBuyer, async (req, res) => {
   const user = await User.findById(req.user.id).select("-password");
 
@@ -63,6 +63,18 @@ router.put("/perform/deposit", verifyTokenBuyer, async (req, res) => {
       .json("deposit is only allowed by 5, 10, 20, 50 and 100 amounts");
 
   user.deposit += req.body.deposit;
+  user.save();
+
+  res.json(user);
+});
+
+//Reset Deposit
+router.put("/deposit/reset", verifyTokenBuyer, async (req, res) => {
+  const user = await User.findById(req.user.id).select("-password");
+
+  if (!user) return res.status(404).json("the user not found");
+
+  user.deposit = 0;
   user.save();
 
   res.json(user);
