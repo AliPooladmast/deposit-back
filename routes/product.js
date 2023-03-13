@@ -62,6 +62,15 @@ router.get("/find/:id", validateObjectId, async (req, res) => {
   res.json(product);
 });
 
+//Get All Products
+router.get("/", async (req, res) => {
+  const products = await Product.find();
+
+  if (!products?.length > 0) return res.status(404).json("products not found");
+
+  res.json(products);
+});
+
 //Buy Product
 router.put("/perform/buy", verifyTokenBuyer, async (req, res) => {
   const user = await User.findById(req.user.id).select("-password");
