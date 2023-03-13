@@ -57,15 +57,17 @@ router.put("/perform/deposit", verifyTokenBuyer, async (req, res) => {
 
   if (!user) return res.status(404).json("the user not found");
 
-  if (!depositCoins.includes(req.body.deposit))
+  const charge = Number(req.body.deposit);
+
+  if (!depositCoins.includes(charge))
     return res
       .status(404)
       .json("deposit is only allowed by 5, 10, 20, 50 and 100 amounts");
 
-  user.deposit += req.body.deposit;
+  user.deposit += charge;
   user.save();
 
-  res.json(user);
+  res.json(user.deposit);
 });
 
 //Reset Deposit
