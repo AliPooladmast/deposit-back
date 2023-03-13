@@ -12,6 +12,7 @@ const ProductSchema = new mongooseModule.Schema(
       minlength: 3,
       maxlength: 50,
     },
+    img: { type: String },
     cost: { type: Number, required: true, min: 1 },
     amountAvailable: { type: Number, required: true, min: 1 },
   },
