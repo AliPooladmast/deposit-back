@@ -12,7 +12,7 @@ const UserSchema = new mongoose.Schema(
       maxlength: 50,
     },
     password: { type: String, required: true, minlength: 5, maxlength: 1023 },
-    deposit: { type: Number, required: true, min: 0 },
+    deposit: { type: Number, default: 0, min: 0 },
     role: {
       type: String,
       default: "Buyer",
@@ -38,14 +38,12 @@ UserSchema.methods.generateAuthToken = function () {
 const createSchema = Joi.object({
   username: Joi.string().min(2).max(50).required(),
   password: Joi.string().min(5).max(1023).required(),
-  deposit: Joi.number().min(1).required(),
   role: Joi.string().min(2).max(10),
 });
 
 const editSchema = Joi.object({
   username: Joi.string().min(2).max(50),
   password: Joi.string().min(5).max(1023),
-  deposit: Joi.number().min(0),
   role: Joi.string().min(2).max(10),
 });
 
